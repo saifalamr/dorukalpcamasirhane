@@ -24,6 +24,13 @@ export function CustomerProductManager({
   const availableToAdd = allProducts.filter((p) => !assignedMap.has(p.id));
   const productName = (id: string) => allProducts.find((p) => p.id === id)?.name ?? "";
 
+  function selectNewProduct(id: string) {
+    setNewProductId(id);
+    // Prefill with the catalog's list price so entry is usually just a click on Ekle.
+    const selected = allProducts.find((p) => p.id === id);
+    setNewPrice(selected?.default_price ? String(selected.default_price) : "");
+  }
+
   async function addProduct() {
     if (!newProductId || newPrice === "") return;
     setSaving(true);
@@ -61,9 +68,10 @@ export function CustomerProductManager({
   return (
     <div>
       <div className="bg-white rounded-md border border-line overflow-hidden mb-4">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full text-sm min-w-[560px]">
           <thead>
-            <tr className="bg-teal-50 text-ink/70 text-left">
+            <tr className="bg-gold-100/50 text-ink/70 text-left">
               <th className="px-4 py-2.5 font-medium">Malzeme</th>
               <th className="px-4 py-2.5 font-medium text-right w-40">Birim Fiyat</th>
               <th className="px-4 py-2.5 font-medium">Durum</th>
@@ -85,7 +93,7 @@ export function CustomerProductManager({
                   />
                 </td>
                 <td className="px-4 py-2.5">
-                  <span className={`text-xs px-2 py-0.5 rounded ${a.active ? "bg-teal-100 text-teal-800" : "bg-line text-ink/50"}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded ${a.active ? "bg-gold-100 text-accent" : "bg-line text-ink/50"}`}>
                     {a.active ? "Aktif" : "Pasif"}
                   </span>
                 </td>
@@ -105,6 +113,7 @@ export function CustomerProductManager({
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {availableToAdd.length > 0 && (
@@ -113,7 +122,7 @@ export function CustomerProductManager({
             <label className="block text-xs font-medium text-ink/70 mb-1">Malzeme Ekle</label>
             <select
               value={newProductId}
-              onChange={(e) => setNewProductId(e.target.value)}
+              onChange={(e) => selectNewProduct(e.target.value)}
               className="rounded border border-line px-3 py-1.5 text-sm"
             >
               <option value="">Seçiniz...</option>
@@ -135,7 +144,7 @@ export function CustomerProductManager({
           <button
             onClick={addProduct}
             disabled={saving}
-            className="rounded bg-teal-700 text-white text-sm font-medium px-4 py-1.5 hover:bg-teal-600 disabled:opacity-60"
+            className="rounded bg-navy-800 text-white text-sm font-medium px-4 py-1.5 hover:bg-navy-700 disabled:opacity-60"
           >
             Ekle
           </button>

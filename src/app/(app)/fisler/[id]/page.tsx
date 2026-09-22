@@ -5,13 +5,18 @@ import { PrintButton } from "@/components/PrintButton";
 
 export const dynamic = "force-dynamic";
 
-export default async function FisDetailPage({ params }: { params: { id: string } }) {
-  const supabase = createClient();
+export default async function FisDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const supabase = await createClient();
+  const { id } = await params;
 
   const { data: record } = await supabase
     .from("daily_records")
     .select("id, record_date, customer_id, customers(name, address, phone)")
-    .eq("id", params.id)
+    .eq("id", id)
     .maybeSingle();
 
   if (!record) notFound();
@@ -20,11 +25,17 @@ export default async function FisDetailPage({ params }: { params: { id: string }
   const { data: items } = await supabase
     .from("daily_record_items")
     .select("quantity, unit_price_snapshot, line_total, products(name, unit)")
-    .eq("daily_record_id", params.id)
+    .eq("daily_record_id", id)
     .order("created_at");
 
-  const totalQty = (items ?? []).reduce((s, i: any) => s + Number(i.quantity), 0);
-  const totalAmount = (items ?? []).reduce((s, i: any) => s + Number(i.line_total), 0);
+  const totalQty = (items ?? []).reduce(
+    (s, i: any) => s + Number(i.quantity),
+    0
+  );
+  const totalAmount = (items ?? []).reduce(
+    (s, i: any) => s + Number(i.line_total),
+    0
+  );
   const customer: any = rec.customers;
 
   return (
@@ -37,17 +48,25 @@ export default async function FisDetailPage({ params }: { params: { id: string }
       <div className="print-area bg-white rounded-md border border-line max-w-2xl p-8 shadow-sm">
         <div className="flex items-start justify-between border-b border-line pb-4 mb-6">
           <div>
-            <p className="text-xs uppercase tracking-wide text-ink/50">Günlük Fiş</p>
-            <p className="text-xl font-semibold text-ink mt-1">{customer?.name}</p>
-            {customer?.address && <p className="text-sm text-ink/60 mt-0.5">{customer.address}</p>}
+            <p className="text-xs uppercase tracking-wide text-ink/50">
+              Günlük Fiş
+            </p>
+            <p className="text-xl font-semibold text-ink mt-1">
+              {customer?.name}
+            </p>
+            {customer?.address && (
+              <p className="text-sm text-ink/60 mt-0.5">{customer.address}</p>
+            )}
           </div>
           <div className="text-right">
             <p className="text-sm text-ink/60">Tarih</p>
-            <p className="text-lg font-medium text-ink">{formatDateTR(rec.record_date)}</p>
+            <p className="text-lg font-medium text-ink">
+              {formatDateTR(rec.record_date)}
+            </p>
           </div>
         </div>
 
-        <table className="w-full text-sm mb-6">
+        <table className="w-full text-sm mb-6 min-w-[420px]">
           <thead>
             <tr className="text-left text-ink/60 border-b border-line">
               <th className="py-2 font-medium">Malzeme</th>
@@ -60,9 +79,16 @@ export default async function FisDetailPage({ params }: { params: { id: string }
             {(items ?? []).map((i: any, idx: number) => (
               <tr key={idx} className="border-b border-line/60">
                 <td className="py-2">{i.products?.name}</td>
-                <td className="py-2 text-right">{Number(i.quantity).toLocaleString("tr-TR")} {i.products?.unit}</td>
-                <td className="py-2 text-right">{formatTRY(Number(i.unit_price_snapshot))}</td>
-                <td className="py-2 text-right font-medium">{formatTRY(Number(i.line_total))}</td>
+                <td className="py-2 text-right">
+                  {Number(i.quantity).toLocaleString("tr-TR")}{" "}
+                  {i.products?.unit}
+                </td>
+                <td className="py-2 text-right">
+                  {formatTRY(Number(i.unit_price_snapshot))}
+                </td>
+                <td className="py-2 text-right font-medium">
+                  {formatTRY(Number(i.line_total))}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -74,7 +100,7 @@ export default async function FisDetailPage({ params }: { params: { id: string }
               <span>Toplam Adet</span>
               <span>{totalQty.toLocaleString("tr-TR")}</span>
             </div>
-            <div className="flex justify-between text-base font-semibold text-teal-900 py-1 border-t border-line mt-1 pt-2">
+            <div className="flex justify-between text-base font-semibold text-accent py-1 border-t border-line mt-1 pt-2">
               <span>Genel Toplam</span>
               <span>{formatTRY(totalAmount)}</span>
             </div>

@@ -17,6 +17,8 @@ export type Product = {
   id: string;
   name: string;
   unit: "adet" | "m2";
+  /** Catalog default (list) price — prefills when assigning to a customer. */
+  default_price: number;
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -48,6 +50,18 @@ export type DailyRecordItem = {
   quantity: number;
   unit_price_snapshot: number;
   line_total: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type CustomerPayment = {
+  id: string;
+  customer_id: string;
+  amount: number;
+  /** First day of the month this payment is attributed to (YYYY-MM-01). */
+  period_month: string;
+  paid_at: string;
+  note: string | null;
   created_at: string;
   updated_at: string;
 };

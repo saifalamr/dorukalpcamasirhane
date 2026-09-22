@@ -4,23 +4,31 @@ import { createClient } from "@/lib/supabase/server";
 type Item = { productId: string; quantity: number; unitPrice: number };
 
 export async function POST(request: Request) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
+  const { data } = await supabase.auth.getClaims();
+  if (!data?.claims) {
     return NextResponse.json({ error: "Yetkisiz." }, { status: 401 });
   }
 
   const body = await request.json();
-  const { customerId, date, items } = body as { customerId: string; date: string; items: Item[] };
+  const { customerId, date, items } = body as {
+    customerId: string;
+    date: string;
+    items: Item[];
+  };
 
   if (!customerId || !date) {
-    return NextResponse.json({ error: "Müşteri ve tarih zorunludur." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Müşteri ve tarih zorunludur." },
+      { status: 400 }
+    );
   }
   if (items.some((i) => i.quantity < 0)) {
-    return NextResponse.json({ error: "Miktar negatif olamaz." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Miktar negatif olamaz." },
+      { status: 400 }
+    );
   }
 
   // Find-or-create: never create a second daily_record for the same customer + date.
@@ -56,14 +64,16 @@ export async function POST(request: Request) {
   }
 
   if (items.length > 0) {
-    const { error: insertError } = await supabase.from("daily_record_items").insert(
-      items.map((i) => ({
-        daily_record_id: recordId,
-        product_id: i.productId,
-        quantity: i.quantity,
-        unit_price_snapshot: i.unitPrice,
-      }))
-    );
+    const { error: insertError } = await supabase
+      .from("daily_record_items")
+      .insert(
+        items.map((i) => ({
+          daily_record_id: recordId,
+          product_id: i.productId,
+          quantity: i.quantity,
+          unit_price_snapshot: i.unitPrice,
+        }))
+      );
     if (insertError) {
       return NextResponse.json({ error: insertError.message }, { status: 500 });
     }

@@ -7,6 +7,7 @@ insert into products (name, unit) values
   ('Küçük Havlu', 'adet'),
   ('Ayak Havlusu', 'adet'),
   ('Bornoz', 'adet'),
+  ('Yastık Alezi', 'adet'),
   ('Traş Havlusu', 'adet'),
   ('Yastık Kılıfı', 'adet'),
   ('Yastık', 'adet'),
@@ -47,29 +48,30 @@ insert into customers (name) values
 insert into customer_products (customer_id, product_id, unit_price)
 select c.id, p.id,
   case p.name
-    when 'Çarşaf Büyük' then 10.00
-    when 'Nevresim Büyük' then 15.00
-    when 'Büyük Havlu' then 5.00
-    when 'Küçük Havlu' then 3.00
-    when 'Ayak Havlusu' then 3.50
-    when 'Bornoz' then 12.00
+    when 'Çarşaf Büyük' then 19.00
+    when 'Nevresim Büyük' then 26.00
+    when 'Büyük Havlu' then 16.00
+    when 'Küçük Havlu' then 9.00
+    when 'Ayak Havlusu' then 9.00
+    when 'Bornoz' then 30.00
+    when 'Yastık Alezi' then 9.00
     when 'Traş Havlusu' then 2.50
-    when 'Yastık Kılıfı' then 4.00
-    when 'Yastık' then 8.00
-    when 'Yorgan' then 20.00
-    when 'Battaniye' then 18.00
-    when 'Pike' then 16.00
-    when 'Yatak Örtüsü' then 17.00
-    when 'Alez' then 9.00
-    when 'Throw' then 14.00
-    when 'Minder Kılıfı' then 6.00
-    when 'Kırlent Kılıfı' then 5.50
-    when 'Masa Örtüsü' then 13.00
-    when 'Masa Kapak' then 7.00
-    when 'Runner' then 6.50
-    when 'Peçete' then 1.50
-    when 'Paspas' then 8.50
-    when 'Mop' then 9.50
+    when 'Yastık Kılıfı' then 9.00
+    when 'Yastık' then 40.00
+    when 'Yorgan' then 75.00
+    when 'Battaniye' then 55.00
+    when 'Pike' then 30.00
+    when 'Yatak Örtüsü' then 30.00
+    when 'Alez' then 26.00
+    when 'Throw' then 17.00
+    when 'Minder Kılıfı' then 16.00
+    when 'Kırlent Kılıfı' then 16.00
+    when 'Masa Örtüsü' then 33.00
+    when 'Masa Kapak' then 20.00
+    when 'Runner' then 18.00
+    when 'Peçete' then 6.00
+    when 'Paspas' then 17.00
+    when 'Mop' then 17.00
     else 0
   end
 from customers c
