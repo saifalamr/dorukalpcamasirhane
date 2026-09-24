@@ -96,16 +96,27 @@ export function WhatsAppShareButton({
         share?: (d: { files?: File[]; title?: string; text?: string }) => Promise<void>;
       };
 
+      const tryShare = async (f: File): Promise<boolean> => {
+        if (!nav.canShare?.({ files: [f] }) || !nav.share) return false;
+        try {
+          await nav.share({ files: [f], title: f.name, text: `${customerName} — ${periodLabel}` });
+          return true;
+        } catch (shareErr) {
+          if ((shareErr as DOMException)?.name === "AbortError") return true; // user closed the sheet
+          return false;
+        }
+      };
+
       // Fresh-tap path: blob is cached, so this call is instant and the
       // transient activation from the option tap is still valid.
-      if (nav.canShare?.({ files: [webFile] }) && nav.share) {
-        try {
-          await nav.share({ files: [webFile], title: file.name, text: `${customerName} — ${periodLabel}` });
-          return;
-        } catch (shareErr) {
-          // User cancelled the sheet is fine; anything else → fallback.
-          if ((shareErr as DOMException)?.name === "AbortError") return;
-        }
+      if (await tryShare(webFile)) return;
+
+      // Android/Chrome reject spreadsheet MIME types in the share sheet but
+      // accept the same bytes as a generic binary — retry once that way so
+      // Excel gets the SAME native share-sheet experience as PDF.
+      if (format === "excel") {
+        const generic = new File([file.blob], file.name, { type: "application/octet-stream" });
+        if (await tryShare(generic)) return;
       }
 
       // Fallback (desktop / unsupported): download + visible WhatsApp link.
