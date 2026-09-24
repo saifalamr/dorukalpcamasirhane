@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatTRY, formatDateTR, MONTHS_TR } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 import { PrintButton } from "@/components/PrintButton";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +46,7 @@ export default async function MonthlyReportPage({
     supabase
       .from("daily_record_items")
       .select(
-        "daily_record_id, quantity, unit_price_snapshot, line_total, products(name, unit), daily_records!inner(record_date)"
+        "daily_record_id, product_id, quantity, unit_price_snapshot, line_total, products(name, unit), daily_records!inner(record_date)"
       )
       .eq("daily_records.customer_id", id)
       .gte("daily_records.record_date", from)
@@ -98,12 +98,15 @@ export default async function MonthlyReportPage({
           <h1 className="text-2xl font-semibold text-ink mt-1">Aylık Rapor — {periodLabel}</h1>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <WhatsAppButton
+          <WhatsAppShareButton
+            fileName={`Fatura - ${customer.name} - ${periodLabel}`}
+            withPdf
+            withExcel
+            excelUrl={`/api/excel-export?customer=${id}&year=${year}&month=${month}`}
             customerName={customer.name}
-            period={periodLabel}
-            monthlyTotal={monthlyTotal}
-            deliveryCount={deliveryCount}
+            periodLabel={periodLabel}
             customerPhone={customer.phone}
+            label="WhatsApp ile Gönder"
           />
           <PrintButton customerName={customer.name} period={periodLabel} />
         </div>

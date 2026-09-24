@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateTR, formatTRY } from "@/lib/format";
 import { PrintButton } from "@/components/PrintButton";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,12 @@ export default async function FisDetailPage({
           >
             İrsaliye (Fiyatsız)
           </Link>
+          <WhatsAppShareButton
+            fileName={`Fis - ${customer?.name ?? ""} - ${rec.record_date}`}
+            customerName={customer?.name ?? ""}
+            periodLabel={formatDateTR(rec.record_date)}
+            customerPhone={customer?.phone}
+          />
           <PrintButton />
         </div>
       </div>

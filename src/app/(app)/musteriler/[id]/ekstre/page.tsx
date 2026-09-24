@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatTRY, formatDateTR, MONTHS_TR, toISODate } from "@/lib/format";
 import { PrintButton } from "@/components/PrintButton";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
 import { derivePaymentStatus } from "@/lib/payment-status";
 import { PaymentStatusChip } from "@/components/ui/PaymentStatusChip";
 import { StatementLetterhead } from "@/components/StatementLetterhead";
@@ -152,6 +153,12 @@ export default async function CustomerStatementPage({
           >
             ← Önceki ay
           </Link>
+          <WhatsAppShareButton
+            fileName={`Ekstre - ${customer.name} - ${MONTHS_TR[month - 1]} ${year}`}
+            customerName={customer.name}
+            periodLabel={`${MONTHS_TR[month - 1]} ${year}`}
+            customerPhone={customer.phone}
+          />
           <PrintButton customerName={customer.name} period={`${MONTHS_TR[month - 1]} ${year}`} />
         </div>
       </div>

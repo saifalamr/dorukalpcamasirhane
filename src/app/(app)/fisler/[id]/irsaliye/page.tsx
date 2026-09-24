@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatDateTR } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 import { PrintButton } from "@/components/PrintButton";
+import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -48,10 +49,18 @@ export default async function IrsaliyePage({
         <Link href={`/fisler/${id}`} className="text-sm text-gold-600 hover:underline">
           ← Fişe Dön
         </Link>
-        <PrintButton
-          customerName={customer?.name}
-          period={formatDateTR(rec.record_date)}
-        />
+        <div className="flex items-center gap-2">
+          <WhatsAppShareButton
+            fileName={`Irsaliye - ${customer?.name ?? ""} - ${rec.record_date}`}
+            customerName={customer?.name ?? ""}
+            periodLabel={formatDateTR(rec.record_date)}
+            customerPhone={customer?.phone}
+          />
+          <PrintButton
+            customerName={customer?.name}
+            period={formatDateTR(rec.record_date)}
+          />
+        </div>
       </div>
 
       <div className="print-area bg-white rounded-md border border-line max-w-2xl p-8 shadow-sm mx-auto">
