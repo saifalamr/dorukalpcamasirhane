@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Home,
+  Settings,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -26,6 +27,7 @@ const NAV = [
   { href: "/odemeler", label: "Tahsilat", icon: HandCoins },
   { href: "/musteriler", label: "Müşteriler", icon: Users },
   { href: "/malzemeler", label: "Malzemeler", icon: Package },
+  { href: "/ayarlar", label: "Ayarlar", icon: Settings },
 ];
 
 /** DORUK ALP mountain mark — inline SVG from the flyer's logo. */

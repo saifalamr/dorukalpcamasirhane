@@ -6,6 +6,7 @@ import { PrintButton } from "@/components/PrintButton";
 import { derivePaymentStatus } from "@/lib/payment-status";
 import { PaymentStatusChip } from "@/components/ui/PaymentStatusChip";
 import { StatementLetterhead } from "@/components/StatementLetterhead";
+import { getSettings } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +38,7 @@ export default async function CustomerStatementPage({
   const from = `${monthKey}-01`;
   const to = `${monthKey}-${String(nDays).padStart(2, "0")}`;
 
-  const [customerRes, recordsRes, itemsRes, paymentsRes, prevBilledRes, prevPaidRes] = await Promise.all([
+  const [customerRes, recordsRes, itemsRes, paymentsRes, prevBilledRes, prevPaidRes, settings] = await Promise.all([
     supabase.from("customers").select("*").eq("id", id).maybeSingle(),
     supabase
       .from("daily_records")
@@ -71,6 +72,7 @@ export default async function CustomerStatementPage({
       .select("amount")
       .eq("customer_id", id)
       .lt("period_month", `${monthKey}-01`),
+    getSettings(),
   ]);
 
   const customer = customerRes.data;
@@ -161,6 +163,12 @@ export default async function CustomerStatementPage({
           phone={customer.phone}
           period={`${MONTHS_TR[month - 1]} ${year}`}
           issued={formatDateTR(toISODate(new Date()))}
+          brand={{
+            storeName: settings.store_name,
+            tagline: settings.store_tagline,
+            storePhone: settings.phone,
+            logoUrl: settings.logo_url,
+          }}
         />
 
         {/* Summary */}
