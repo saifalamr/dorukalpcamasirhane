@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateTR, formatTRY } from "@/lib/format";
 import { PrintButton } from "@/components/PrintButton";
@@ -42,7 +43,15 @@ export default async function FisDetailPage({
     <div>
       <div className="no-print flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold text-ink">Günlük Fiş</h1>
-        <PrintButton />
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/fisler/${id}/irsaliye`}
+            className="inline-flex items-center gap-2 rounded border border-line bg-white text-sm font-medium px-4 py-2 text-ink hover:bg-gold-100/60 transition-colors"
+          >
+            İrsaliye (Fiyatsız)
+          </Link>
+          <PrintButton />
+        </div>
       </div>
 
       <div className="print-area bg-white rounded-md border border-line max-w-2xl p-8 shadow-sm">

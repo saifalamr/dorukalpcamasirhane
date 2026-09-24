@@ -15,6 +15,7 @@ import {
   X,
   Home,
   Settings,
+  FileText,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -24,6 +25,7 @@ const NAV = [
   { href: "/giris", label: "Günlük Giriş", icon: ClipboardEdit },
   { href: "/fisler", label: "Günlük Fişler", icon: Receipt },
   { href: "/rapor", label: "Raporlar", icon: BarChart3 },
+  { href: "/faturalama", label: "Aylık Faturalama", icon: FileText },
   { href: "/odemeler", label: "Tahsilat", icon: HandCoins },
   { href: "/musteriler", label: "Müşteriler", icon: Users },
   { href: "/malzemeler", label: "Malzemeler", icon: Package },

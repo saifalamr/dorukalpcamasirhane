@@ -40,6 +40,12 @@ export default async function MusteriDetailPage({
             Hesap Ekstresi
           </Link>
           <Link
+            href={`/faturalama?customer=${customer.id}`}
+            className="text-gold-600 hover:underline"
+          >
+            Aylık Faturalama
+          </Link>
+          <Link
             href={`/rapor?customer=${customer.id}`}
             className="text-gold-600 hover:underline"
           >
