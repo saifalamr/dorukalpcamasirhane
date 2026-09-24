@@ -1,0 +1,35 @@
+# Keeps the Supabase free-tier project from pausing after 7 days of inactivity.
+# Makes a tiny authenticated request every 3 days — enough to reset the timer.
+# If the ping fails (e.g. project paused anyway), the workflow run fails and
+# GitHub emails the repo owner automatically.
+
+name: Supabase keep-alive
+
+on:
+  schedule:
+    # Every 3 days at 09:00 UTC (12:00 TRT).
+    - cron: "0 9 */3 * *"
+  # Allow manual trigger from the GitHub Actions tab.
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST endpoint
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -e
+          echo "Pinging $SUPABASE_URL ..."
+          HTTP=$(curl -s -o /dev/null -w "%{http_code}" \
+            --max-time 30 \
+            "$SUPABASE_URL/rest/v1/products?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY")
+          echo "HTTP status: $HTTP"
+          if [ "$HTTP" != "200" ]; then
+            echo "::error::Supabase ping failed with HTTP $HTTP — check the project in the Supabase dashboard."
+            exit 1
+          fi
+          echo "✅ Supabase is alive — inactivity timer reset."
