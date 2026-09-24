@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateTR, formatTRY } from "@/lib/format";
 import { DeleteRecordButton } from "@/components/DeleteRecordButton";
+import { FisWhatsAppLink } from "@/components/FisWhatsAppLink";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export default async function GunlukFislerPage({
   const supabase = await createClient();
   const params = await searchParams;
 
-  const customersQuery = supabase.from("customers").select("id, name").order("name");
+  const customersQuery = supabase.from("customers").select("id, name, phone").order("name");
 
   let query = supabase
     .from("daily_records_with_totals")
@@ -25,6 +26,7 @@ export default async function GunlukFislerPage({
   if (params.to) query = query.lte("record_date", params.to);
 
   const [{ data: customers }, { data: records }] = await Promise.all([customersQuery, query.limit(200)]);
+  const phoneByCustomer = new Map((customers ?? []).map((c) => [c.id, c.phone]));
 
   return (
     <div>
@@ -77,6 +79,13 @@ export default async function GunlukFislerPage({
                     <Link href={`/fisler/${r.id}`} className="text-xs text-gold-600 hover:underline">
                       Görüntüle
                     </Link>
+                    <FisWhatsAppLink
+                      recordId={r.id}
+                      customerName={r.customers?.name ?? ""}
+                      recordDate={r.record_date}
+                      totalQty={Number(r.total_quantity)}
+                      customerPhone={phoneByCustomer.get(r.customer_id)}
+                    />
                     <DeleteRecordButton id={r.id} />
                   </span>
                 </td>

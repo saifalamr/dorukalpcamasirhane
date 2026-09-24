@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/Toast";
 import { formatTRY, toISODate } from "@/lib/format";
-import { AlertCircle, Check, ChevronDown, Package, Plus, Save, Users } from "lucide-react";
+import { AlertCircle, Check, ChevronDown, Copy, Package, Plus, Save, Users } from "lucide-react";
 import type { Customer, Product } from "@/types/database";
 
 type Row = {
@@ -22,6 +23,7 @@ function todayISO() {
 
 export default function GunlukGirisPage() {
   const supabase = useMemo(() => createClient(), []);
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customerId, setCustomerId] = useState("");
@@ -32,6 +34,9 @@ export default function GunlukGirisPage() {
   const [saved, setSaved] = useState(false);
   const [existingRecordId, setExistingRecordId] = useState<string | null>(null);
   const [focusIdx, setFocusIdx] = useState<number | null>(null);
+  // Yesterday's quantities for the selected customer — powers "Dünü Kopyala".
+  const [yesterdayQty, setYesterdayQty] = useState<Map<string, number>>(new Map());
+  const [copyingYesterday, setCopyingYesterday] = useState(false);
 
   // Full catalog for the "Ek Malzeme Ekle" picker.
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -53,6 +58,12 @@ export default function GunlukGirisPage() {
       if (!cancelled) {
         setCustomers(data ?? []);
         setAllProducts(products ?? []);
+        // Deep-link support: /giris?customer=<id> preselects the customer
+        // (used by the dashboard's "bugünün fişleri" checklist).
+        const pre = searchParams.get("customer");
+        if (pre && (data ?? []).some((c: Customer) => c.id === pre)) {
+          setCustomerId(pre);
+        }
       }
     })();
     return () => {
@@ -73,7 +84,8 @@ export default function GunlukGirisPage() {
     (async () => {
       try {
         // One round-trip: assigned products + existing record + its items, all in parallel.
-        const [{ data: assigned }, recordResult] = await Promise.all([
+        const yesterday = toISODate(new Date(new Date(date + "T00:00:00").getTime() - 86400000));
+        const [{ data: assigned }, recordResult, yResult] = await Promise.all([
           supabase
             .from("customer_products")
             .select("product_id, unit_price, products(name, unit)")
@@ -84,6 +96,12 @@ export default function GunlukGirisPage() {
             .select("id, daily_record_items(product_id, quantity, unit_price_snapshot)")
             .eq("customer_id", customerId)
             .eq("record_date", date)
+            .maybeSingle(),
+          supabase
+            .from("daily_records")
+            .select("daily_record_items(product_id, quantity)")
+            .eq("customer_id", customerId)
+            .eq("record_date", yesterday)
             .maybeSingle(),
         ]);
 
@@ -118,6 +136,10 @@ export default function GunlukGirisPage() {
 
         setRows(nextRows);
         setFocusIdx(null);
+
+        // Remember yesterday's quantities for the one-click copy button.
+        const yItems = (yResult.data as any)?.daily_record_items ?? [];
+        setYesterdayQty(new Map(yItems.map((i: any) => [i.product_id, Number(i.quantity)])));
       } finally {
         if (!cancelled) setLoadingRows(false);
       }
@@ -176,11 +198,28 @@ export default function GunlukGirisPage() {
   }
 
   function updateQuantity(productId: string, value: string) {
-    if (value !== "" && !/^\d*\.?\d*$/.test(value)) return;
+    // Accept both "1.5" and "1,5" (Turkish keyboards type comma).
+    const normalized = value.replace(",", ".");
+    if (normalized !== "" && !/^\d*\.?\d*$/.test(normalized)) return;
     setRows((prev) =>
-      prev.map((r) => (r.productId === productId ? { ...r, quantity: value } : r))
+      prev.map((r) => (r.productId === productId ? { ...r, quantity: normalized } : r))
     );
     setSaved(false);
+  }
+
+  /** Fill today's quantities from yesterday's fiş (agent adjusts from there). */
+  async function copyYesterday() {
+    if (copyingYesterday || yesterdayQty.size === 0) return;
+    setCopyingYesterday(true);
+    setRows((prev) =>
+      prev.map((r) => {
+        const y = yesterdayQty.get(r.productId);
+        return y !== undefined && y > 0 && r.quantity === "" ? { ...r, quantity: String(y) } : r;
+      })
+    );
+    setSaved(false);
+    setCopyingYesterday(false);
+    toast("Dünkü adetler dolduruldu — kontrol edip kaydedin.", "success");
   }
 
   const totals = rows.reduce(
@@ -332,12 +371,31 @@ export default function GunlukGirisPage() {
           </div>
           <div>
             <label className="block text-xs font-medium text-ink/70 mb-1">Tarih</label>
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className="rounded border border-line bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/60"
-            />
+            <div className="flex items-center gap-1.5">
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="rounded border border-line bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500/60"
+              />
+              {/* Quick chip: night-shift entries after midnight often belong to yesterday. */}
+              <button
+                type="button"
+                onClick={() => setDate(toISODate(new Date(Date.now() - 86400000)))}
+                className="rounded border border-line bg-white px-2.5 py-2 text-xs text-ink/60 hover:bg-gold-100/60 hover:text-ink transition-colors"
+                title="Dünün tarihine geç"
+              >
+                Dün
+              </button>
+              <button
+                type="button"
+                onClick={() => setDate(todayISO())}
+                className="rounded border border-line bg-white px-2.5 py-2 text-xs text-ink/60 hover:bg-gold-100/60 hover:text-ink transition-colors"
+                title="Bugüne dön"
+              >
+                Bugün
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -375,6 +433,17 @@ export default function GunlukGirisPage() {
         </div>
       ) : (
         <>
+          {yesterdayQty.size > 0 && (
+            <button
+              type="button"
+              onClick={copyYesterday}
+              disabled={copyingYesterday}
+              className="mb-3 inline-flex items-center gap-2 rounded border border-gold-500/50 bg-gold-100/40 text-accent text-sm font-medium px-4 py-2 hover:bg-gold-100/70 transition-colors disabled:opacity-60"
+            >
+              <Copy size={14} />
+              Dünü Kopyala ({yesterdayQty.size} malzeme)
+            </button>
+          )}
           <div className="bg-white rounded-md border border-line overflow-hidden max-w-2xl shadow-sm">
             <div className="overflow-x-auto">
             <table className="w-full text-sm min-w-[480px]">

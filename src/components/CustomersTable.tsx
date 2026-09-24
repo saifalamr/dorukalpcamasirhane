@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Pencil, Plus, Search } from "lucide-react";
+import { Pencil, Plus, Search, MessageCircle } from "lucide-react";
 import { CustomerFormModal } from "@/components/CustomerFormModal";
 import { ConfirmDelete } from "@/components/ui/ConfirmDelete";
 import { ToggleActiveButton } from "@/components/ToggleActiveButton";
@@ -82,7 +82,25 @@ export function CustomersTable({ customers }: { customers: Customer[] }) {
                   )}
                   {c.name}
                 </td>
-                <td className="px-4 py-2.5 text-ink/70">{c.phone ?? "—"}</td>
+                <td className="px-4 py-2.5 text-ink/70">
+                  {c.phone ? (
+                    <span className="inline-flex items-center gap-2">
+                      {c.phone}
+                      <a
+                        href={`https://wa.me/${c.phone.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1 rounded text-green-600/70 hover:text-green-600 hover:bg-green-50 transition-colors"
+                        title="WhatsApp'ta aç"
+                        aria-label={`${c.name} WhatsApp`}
+                      >
+                        <MessageCircle size={14} />
+                      </a>
+                    </span>
+                  ) : (
+                    "—"
+                  )}
+                </td>
                 <td className="px-4 py-2.5 text-ink/70">{c.address ?? "—"}</td>
                 <td className="px-4 py-2.5">
                   <span

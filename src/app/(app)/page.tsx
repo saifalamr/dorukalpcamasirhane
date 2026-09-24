@@ -51,7 +51,7 @@ export default async function DashboardPage() {
       .from("daily_records_with_totals")
       .select("customer_id, total_amount")
       .lt("record_date", monthStart),
-    supabase.from("customers").select("id, name"),
+    supabase.from("customers").select("id, name, active"),
   ]);
 
   // ===== Billing/paid aggregation =====
@@ -104,6 +104,12 @@ export default async function DashboardPage() {
   const todayQty = (todayRecord ?? []).reduce((s, r) => s + Number(r.total_quantity), 0);
   const todayAmount = (todayRecord ?? []).reduce((s, r) => s + Number(r.total_amount), 0);
   const monthAmount = (monthRecords ?? []).reduce((s, r) => s + Number(r.total_amount), 0);
+
+  // Today's entry checklist: which active hotels have NOT sent a fiş yet today.
+  const doneToday = new Set((todayRecord ?? []).map((r) => r.customer_id));
+  const pendingToday = (customersRaw ?? [])
+    .filter((c) => c.active && !doneToday.has(c.id))
+    .sort((a, b) => a.name.localeCompare(b.name, "tr"));
 
   const cards = [
     { label: "Bugünün Tutarı", value: formatTRY(todayAmount), Icon: Wallet, danger: false },
@@ -195,6 +201,40 @@ export default async function DashboardPage() {
                 </li>
               ))}
             </ul>
+          )}
+        </div>
+
+        {/* Today's entry checklist: who hasn't sent a fiş yet */}
+        <div className="bg-white rounded-md border border-line p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-medium text-ink/70">Bugünün Fişleri</p>
+            <Link href="/giris" className="text-xs text-gold-600 hover:underline">
+              Giriş yap →
+            </Link>
+          </div>
+          {pendingToday.length === 0 ? (
+            <p className="text-sm text-ink/40 py-6 text-center">
+              Tüm oteller bugün girildi. 👏
+            </p>
+          ) : (
+            <>
+              <p className="text-xs text-ink/50 mb-2">
+                {pendingToday.length} otel bugün için bekleniyor:
+              </p>
+              <ul className="divide-y divide-line/60 max-h-64 overflow-y-auto">
+                {pendingToday.map((c) => (
+                  <li key={c.id} className="flex items-center justify-between py-2">
+                    <span className="text-sm text-ink">{c.name}</span>
+                    <Link
+                      href={`/giris?customer=${c.id}`}
+                      className="text-xs text-gold-600 hover:underline shrink-0"
+                    >
+                      Fiş gir
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
 

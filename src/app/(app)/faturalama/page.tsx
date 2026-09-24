@@ -187,6 +187,12 @@ export default async function MonthlyBillingPage({ searchParams }: { searchParam
         >
           Hesap Ekstresi
         </Link>
+        <Link
+          href={`/fisler/irsaliye-toplu?customer=${customerId}&year=${year}&month=${month}`}
+          className="inline-flex items-center gap-2 rounded border border-line bg-white text-sm font-medium px-4 py-2 text-ink hover:bg-gold-100/60 transition-colors"
+        >
+          Toplu İrsaliye (aylık)
+        </Link>
       </div>
 
       {/* Per-day table */}
