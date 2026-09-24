@@ -4,7 +4,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
       <Sidebar />
-      <main className="flex-1 px-4 py-5 md:px-8 md:py-7 md:max-w-[1400px] w-full">
+      <main className="flex-1 px-4 py-5 md:px-8 md:py-7 md:max-w-[1400px] w-full pb-20 md:pb-7">
         {children}
       </main>
     </div>

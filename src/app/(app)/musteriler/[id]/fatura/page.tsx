@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatTRY, formatDateTR, MONTHS_TR } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 import { PrintButton } from "@/components/PrintButton";
 import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -90,13 +90,15 @@ export default async function MonthlyReportPage({
 
   return (
     <div>
+      <Breadcrumbs
+        items={[
+          { label: "Aylık Faturalama", href: "/faturalama" },
+          { label: customer.name, href: `/faturalama?customer=${id}&year=${year}&month=${month}` },
+          { label: `Aylık Rapor — ${periodLabel}` },
+        ]}
+      />
       <div className="no-print flex flex-wrap items-center justify-between gap-2 mb-6">
-        <div>
-          <Link href={`/faturalama?customer=${id}&year=${year}&month=${month}`} className="text-sm text-gold-600 hover:underline">
-            ← Aylık Faturalama
-          </Link>
-          <h1 className="text-2xl font-semibold text-ink mt-1">Aylık Rapor — {periodLabel}</h1>
-        </div>
+        <h1 className="text-2xl font-semibold text-ink">Aylık Rapor — {periodLabel}</h1>
         <div className="flex flex-wrap items-center gap-2">
           <WhatsAppShareButton
             fileName={`Fatura - ${customer.name} - ${periodLabel}`}

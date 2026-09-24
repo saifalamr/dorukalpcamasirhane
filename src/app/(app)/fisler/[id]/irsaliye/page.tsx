@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatDateTR } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
 import { PrintButton } from "@/components/PrintButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
 import Link from "next/link";
 
@@ -45,10 +46,14 @@ export default async function IrsaliyePage({
 
   return (
     <div>
-      <div className="no-print flex items-center justify-between mb-6">
-        <Link href={`/fisler/${id}`} className="text-sm text-gold-600 hover:underline">
-          ← Fişe Dön
-        </Link>
+      <Breadcrumbs
+        items={[
+          { label: "Günlük Fişler", href: "/fisler" },
+          { label: customer?.name ?? "", href: `/fisler/${id}` },
+          { label: "İrsaliye" },
+        ]}
+      />
+      <div className="no-print flex items-center justify-end mb-6">
         <div className="flex items-center gap-2">
           <WhatsAppShareButton
             fileName={`Irsaliye - ${customer?.name ?? ""} - ${rec.record_date}`}

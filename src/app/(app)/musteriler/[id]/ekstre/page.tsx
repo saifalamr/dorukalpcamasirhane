@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { formatTRY, formatDateTR, MONTHS_TR, toISODate } from "@/lib/format";
 import { PrintButton } from "@/components/PrintButton";
 import { WhatsAppShareButton } from "@/components/WhatsAppShareButton";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { derivePaymentStatus } from "@/lib/payment-status";
 import { PaymentStatusChip } from "@/components/ui/PaymentStatusChip";
 import { StatementLetterhead } from "@/components/StatementLetterhead";
@@ -137,15 +138,17 @@ export default async function CustomerStatementPage({
 
   return (
     <div>
+      <Breadcrumbs
+        items={[
+          { label: "Müşteriler", href: "/musteriler" },
+          { label: customer.name, href: `/musteriler/${id}` },
+          { label: `Ekstre — ${MONTHS_TR[month - 1]} ${year}` },
+        ]}
+      />
       <div className="no-print flex items-center justify-between mb-6">
-        <div>
-          <Link href={`/musteriler/${id}`} className="text-sm text-gold-600 hover:underline">
-            ← {customer.name}
-          </Link>
-          <h1 className="text-2xl font-semibold text-ink mt-1">
-            Ekstre — {MONTHS_TR[month - 1]} {year}
-          </h1>
-        </div>
+        <h1 className="text-2xl font-semibold text-ink">
+          Ekstre — {MONTHS_TR[month - 1]} {year}
+        </h1>
         <div className="flex items-center gap-2">
           <Link
             href={`/musteriler/${id}/ekstre?year=${month === 1 ? year - 1 : year}&month=${month === 1 ? 12 : month - 1}`}

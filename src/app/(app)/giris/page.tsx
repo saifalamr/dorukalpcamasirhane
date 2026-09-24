@@ -524,7 +524,7 @@ export default function GunlukGirisPage() {
 
       {/* Sticky save bar */}
       {customerId && rows.length > 0 && !loadingRows && (
-        <div className="fixed bottom-0 left-0 md:left-60 right-0 z-40 no-print">
+        <div className="fixed bottom-14 md:bottom-0 left-0 md:left-60 right-0 z-30 no-print">
           <div className="mx-4 md:mx-8 my-4 max-w-[1400px] bg-navy-950 text-white rounded-lg shadow-xl border border-navy-800 px-4 md:px-5 py-3 flex items-center gap-4">
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { CustomerProductManager } from "@/components/CustomerProductManager";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
@@ -24,14 +25,14 @@ export default async function MusteriDetailPage({
 
   return (
     <div>
+      <Breadcrumbs
+        items={[
+          { label: "Müşteriler", href: "/musteriler" },
+          { label: customer.name },
+        ]}
+      />
       <div className="mb-6">
-        <Link
-          href="/musteriler"
-          className="text-sm text-gold-600 hover:underline"
-        >
-          ← Müşteriler
-        </Link>
-        <h1 className="text-2xl font-semibold text-ink mt-2">{customer.name}</h1>
+        <h1 className="text-2xl font-semibold text-ink">{customer.name}</h1>
         <div className="flex gap-4 mt-2 text-sm">
           <Link
             href={`/musteriler/${customer.id}/ekstre`}

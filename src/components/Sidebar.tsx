@@ -32,6 +32,15 @@ const NAV = [
   { href: "/ayarlar", label: "Ayarlar", icon: Settings },
 ];
 
+// Bottom quick-bar on mobile: the daily pages, one tap each.
+const QUICK_NAV = [
+  { href: "/", label: "Panel", icon: Home },
+  { href: "/giris", label: "Giriş", icon: ClipboardEdit },
+  { href: "/fisler", label: "Fişler", icon: Receipt },
+  { href: "/faturalama", label: "Fatura", icon: FileText },
+  { href: "/musteriler", label: "Müşteri", icon: Users },
+];
+
 /** DORUK ALP mountain mark — inline SVG from the flyer's logo. */
 export function LogoMark({ size = 36 }: { size?: number }) {
   return (
@@ -196,6 +205,29 @@ export function Sidebar() {
         <Brand />
         <NavLinks pathname={pathname} />
       </aside>
+
+      {/* ===== Mobile bottom quick-bar: daily pages in one tap ===== */}
+      <nav className="md:hidden no-print fixed bottom-0 inset-x-0 z-40 bg-navy-950 border-t border-navy-800 pb-[env(safe-area-inset-bottom)]">
+        <div className="grid grid-cols-5">
+          {QUICK_NAV.map((item) => {
+            const active =
+              item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex flex-col items-center gap-0.5 py-2 text-[10px] transition-colors ${
+                  active ? "text-gold-400" : "text-gold-100/60"
+                }`}
+              >
+                <Icon size={18} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </>
   );
 }
