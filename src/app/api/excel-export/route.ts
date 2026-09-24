@@ -125,9 +125,18 @@ export async function GET(request: Request) {
   // ===== Row 1-3: branded header band =====
   ws.mergeCells(1, 1, 3, 3);
   const brandCell = ws.getCell(1, 1);
-  brandCell.value = `${settings.store_name} ${settings.store_tagline}`.trim();
-  brandCell.font = { name: "Calibri", size: 16, bold: true, color: { argb: "FFFFFFFF" } };
-  brandCell.alignment = { vertical: "middle", horizontal: "left", indent: 1 };
+  // Name + phone inside ONE merged cell (rich text, two lines) — overlapping
+  // merges throw "Cannot merge already merged cells".
+  brandCell.value = {
+    richText: [
+      { font: { name: "Calibri", size: 16, bold: true, color: { argb: "FFFFFFFF" } }, text: settings.store_name },
+      { font: { name: "Calibri", size: 11, bold: true, color: { argb: GOLD } }, text: settings.store_tagline.toUpperCase() },
+      ...(settings.phone
+        ? [{ font: { name: "Calibri", size: 9, color: { argb: "FFF4EAD5" } }, text: `Tel: ${settings.phone}` }]
+        : []),
+    ],
+  };
+  brandCell.alignment = { vertical: "middle", horizontal: "left", indent: 1, wrapText: true };
   brandCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: NAVY } };
 
   ws.mergeCells(1, 4, 3, Math.max(4, Math.min(lastCol, 12)));
@@ -149,20 +158,19 @@ export async function GET(request: Request) {
     }
   }
   // Re-apply text after the full-band fill.
-  ws.getCell(1, 1).value = `${settings.store_name} ${settings.store_tagline}`.trim();
-  ws.getCell(1, 1).font = { name: "Calibri", size: 16, bold: true, color: { argb: "FFFFFFFF" } };
-  ws.getCell(1, 1).alignment = { vertical: "middle", horizontal: "left", indent: 1 };
+  ws.getCell(1, 1).value = {
+    richText: [
+      { font: { name: "Calibri", size: 16, bold: true, color: { argb: "FFFFFFFF" } }, text: settings.store_name },
+      { font: { name: "Calibri", size: 11, bold: true, color: { argb: GOLD } }, text: settings.store_tagline.toUpperCase() },
+      ...(settings.phone
+        ? [{ font: { name: "Calibri", size: 9, color: { argb: "FFF4EAD5" } }, text: `Tel: ${settings.phone}` }]
+        : []),
+    ],
+  };
+  ws.getCell(1, 1).alignment = { vertical: "middle", horizontal: "left", indent: 1, wrapText: true };
   ws.getCell(1, 4).value = `AYLIK HİZMET RAPORU — ${periodLabel.toUpperCase()}`;
   ws.getCell(1, 4).font = { name: "Calibri", size: 12, bold: true, color: { argb: GOLD } };
   ws.getCell(1, 4).alignment = { vertical: "middle", horizontal: "right" };
-
-  if (settings.phone) {
-    ws.mergeCells(2, 1, 2, 3);
-    const phoneCell = ws.getCell(2, 1);
-    phoneCell.value = `Tel: ${settings.phone}`;
-    phoneCell.font = { size: 10, color: { argb: "FFF4EAD5" } };
-    phoneCell.alignment = { horizontal: "left", indent: 1 };
-  }
 
   // ===== Row 4: customer info strip =====
   ws.mergeCells(4, 1, 4, 3);
