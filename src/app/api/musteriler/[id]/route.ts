@@ -10,7 +10,11 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
 
   // Records are protected (on delete restrict), so a customer with history
   // cannot be deleted — guide the user to deactivating instead.
-  const { error } = await supabase.from("customers").delete().eq("id", id);
+  const { data: deleted, error } = await supabase
+    .from("customers")
+    .delete()
+    .eq("id", id)
+    .select("id");
   if (error) {
     if (error.code === "23503") {
       return NextResponse.json(
@@ -19,6 +23,14 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
       );
     }
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  // RLS can silently filter a delete (0 rows, no error) — surface that
+  // instead of reporting success on a no-op.
+  if (!deleted || deleted.length === 0) {
+    return NextResponse.json(
+      { error: "Silme yetkisi reddedildi veya müşteri bulunamadı." },
+      { status: 403 }
+    );
   }
   return NextResponse.json({ ok: true });
 }
