@@ -1,0 +1,18 @@
+{
+  "name": "Doruk Alp Çamaşırhane",
+  "short_name": "Doruk Alp",
+  "description": "Doruk Alp Çamaşırhane takip sistemi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#071A33",
+  "theme_color": "#071A33",
+  "lang": "tr",
+  "icons": [
+    {
+      "src": "/doruk-alp-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
