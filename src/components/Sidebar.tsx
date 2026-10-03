@@ -18,7 +18,6 @@ import {
   FileText,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const NAV = [
   { href: "/", label: "Panel", icon: Home },
@@ -41,23 +40,16 @@ const QUICK_NAV = [
   { href: "/musteriler", label: "Müşteri", icon: Users },
 ];
 
-/** DORUK ALP mountain mark — inline SVG from the flyer's logo. */
+/** Shared original Doruk Alp logo for the menu and login. */
 export function LogoMark({ size = 36 }: { size?: number }) {
   return (
-    <div
-      className="rounded bg-navy-800 border border-gold-500/50 flex items-center justify-center shrink-0"
-      style={{ width: size, height: size }}
-    >
-      <svg width={size * 0.62} height={size * 0.62} viewBox="0 0 24 24" fill="none" aria-hidden>
-        {/* Mountain peaks */}
-        <path d="M3 17.5 9.2 8.2l3.4 5 2.1-2.9L21 17.5H3Z" fill="#C9A45C" />
-        {/* Water drop */}
-        <path
-          d="M12 3.2c1.1 1.5 2.3 3.2 2.3 4.6a2.3 2.3 0 1 1-4.6 0c0-1.4 1.2-3.1 2.3-4.6Z"
-          fill="#F4EAD5"
-        />
-      </svg>
-    </div>
+    <img
+      src="/doruk-alp-logo.jpeg"
+      alt="Doruk Alp Çamaşırhane"
+      width={size}
+      height={size}
+      className="rounded-lg border border-gold-500/50 object-contain shrink-0"
+    />
   );
 }
 
@@ -83,7 +75,6 @@ function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () 
         })}
       </nav>
       <div className="px-3 pb-6 pt-2 flex items-center gap-2">
-        <ThemeToggle />
         <LogoutButton />
       </div>
     </>
@@ -118,7 +109,7 @@ function LogoutButton() {
 function Brand() {
   return (
     <div className="px-4 py-5 flex items-center gap-3 shrink-0 border-b border-navy-800/70 mb-2 mx-1">
-      <LogoMark />
+      <LogoMark size={56} />
       <div>
         <p className="text-base font-bold tracking-tight text-white leading-tight">
           DORUK <span className="text-gold-500">ALP</span>
@@ -196,9 +187,6 @@ export function Sidebar() {
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
-            <div className="[&>button]:rounded-xl [&>button]:border-[#DDB96F]/50 [&>button]:bg-[#061A30]/80 [&>button]:shadow-[inset_0_1px_4px_rgba(255,255,255,0.12)] [&>button]:p-2 [&_svg]:h-5 [&_svg]:w-5">
-              <ThemeToggle />
-            </div>
             <button onClick={() => setDrawerOpen(true)} className="p-1 text-[#E6C67D] hover:text-[#FFE6A0] transition-colors" aria-label="Menüyü aç">
               <Menu size={27} />
             </button>

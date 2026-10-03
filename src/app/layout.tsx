@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#071A33",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -41,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-title" content="Doruk Alp" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem("theme");if(t==="dark")document.documentElement.classList.add("dark")}catch(e){}`,
+            __html: `document.documentElement.classList.remove("dark");try{localStorage.removeItem("theme")}catch(e){}`,
           }}
         />
       </head>
