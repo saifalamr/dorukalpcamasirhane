@@ -155,47 +155,45 @@ export function Sidebar() {
   return (
     <>
       {/* ===== Mobile top bar (hidden on md+) ===== */}
-      <header className="md:hidden sticky top-0 z-40 no-print overflow-hidden bg-navy-950 text-white border-b border-gold-500/30">
-        <div className="absolute inset-0 pointer-events-none opacity-25">
-          <svg viewBox="0 0 430 96" className="w-full h-full" preserveAspectRatio="none" aria-hidden>
-            <circle cx="326" cy="24" r="9" fill="none" stroke="#F4EAD5" strokeWidth="1.5" />
-            <circle cx="352" cy="48" r="4" fill="none" stroke="#F4EAD5" strokeWidth="1.2" />
-            <path d="M255 77c45-20 92-26 175-16v35H238c4-7 9-13 17-19Z" fill="#16365A" />
-          </svg>
-        </div>
-        <div className="relative flex items-center justify-between px-4 h-[86px]">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="shrink-0">
-              <LogoMark size={48} />
-            </div>
-            <div className="leading-none min-w-0">
-              <div className="font-bold tracking-tight text-[17px] whitespace-nowrap">
-                DORUK <span className="text-gold-500">ALP</span>
+      <header className="md:hidden sticky top-0 z-40 no-print overflow-hidden bg-[#071A33] text-white">
+        <div className="relative h-[112px] px-4 flex items-center justify-between">
+          <div className="absolute inset-y-0 right-0 w-[48%] pointer-events-none opacity-40">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_45%,rgba(201,164,92,0.18),transparent_48%)]" />
+            <svg viewBox="0 0 210 112" className="w-full h-full" preserveAspectRatio="none" aria-hidden>
+              <circle cx="126" cy="34" r="9" fill="none" stroke="#F4EAD5" strokeWidth="1.2" opacity=".6"/>
+              <circle cx="150" cy="59" r="4" fill="none" stroke="#F4EAD5" strokeWidth="1" opacity=".45"/>
+              <path d="M35 90c46-27 99-31 175-15v37H8c5-8 14-15 27-22Z" fill="#16365A"/>
+            </svg>
+          </div>
+
+          <div className="relative flex items-center gap-3 min-w-0">
+            <img src="/doruk-alp-icon.svg" alt="Doruk Alp" className="h-[58px] w-[58px] object-contain shrink-0" />
+            <div className="min-w-0">
+              <div className="font-bold tracking-tight text-[18px] whitespace-nowrap">
+                DORUK <span className="text-[#D9AE62]">ALP</span>
               </div>
-              <div className="mt-2 text-[9px] uppercase tracking-[0.24em] text-gold-400/90 whitespace-nowrap">
+              <div className="mt-1.5 text-[10px] uppercase tracking-[0.22em] text-[#E6C67D] whitespace-nowrap">
                 Çamaşırhane
               </div>
-              <div className="mt-2 flex items-center gap-1">
-                <span className="h-px w-14 bg-gold-500/80" />
-                <span className="h-1 w-1 rounded-full bg-gold-500" />
-                <span className="h-px w-7 bg-gold-500/80" />
+              <div className="mt-2 flex items-center">
+                <span className="h-px w-20 bg-[#C9A45C]" />
+                <span className="mx-1.5 h-1.5 w-1.5 rounded-full bg-[#C9A45C]" />
+                <span className="h-px w-9 bg-[#C9A45C]" />
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-1.5">
+
+          <div className="relative flex items-center gap-1">
             <ThemeToggle />
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="p-2 rounded-xl hover:bg-navy-800 transition-colors"
-              aria-label="Menüyü aç"
-            >
-              <Menu size={24} className="text-gold-400" />
+            <button onClick={() => setDrawerOpen(true)} className="p-2 rounded-xl hover:bg-white/5 transition-colors" aria-label="Menüyü aç">
+              <Menu size={25} className="text-[#E6C67D]" />
             </button>
           </div>
         </div>
-        <svg viewBox="0 0 430 14" className="absolute bottom-[-1px] left-0 w-full h-3 pointer-events-none" preserveAspectRatio="none" aria-hidden>
-          <path d="M0 9C92 16 147 2 225 8c79 7 127 7 205-4v10H0Z" fill="#F8F6F0" />
-          <path d="M0 7C92 14 147 0 225 6c79 7 127 7 205-4" fill="none" stroke="#C9A45C" strokeWidth="1.4" />
+
+        <svg viewBox="0 0 430 20" className="block w-full h-[16px] -mt-[13px] pointer-events-none" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 8C70 13 123 15 185 7c78-10 132 9 245-3v16H0Z" fill="#F7F5F0"/>
+          <path d="M0 6C70 11 123 13 185 5c78-10 132 9 245-3" fill="none" stroke="#C9A45C" strokeWidth="1.8"/>
         </svg>
       </header>
 
