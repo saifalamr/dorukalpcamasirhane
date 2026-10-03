@@ -155,45 +155,59 @@ export function Sidebar() {
   return (
     <>
       {/* ===== Mobile top bar (hidden on md+) ===== */}
-      <header className="md:hidden sticky top-0 z-40 no-print overflow-hidden bg-[#071A33] text-white">
-        <div className="relative h-[112px] px-4 flex items-center justify-between">
-          <div className="absolute inset-y-0 right-0 w-[48%] pointer-events-none opacity-40">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_45%,rgba(201,164,92,0.18),transparent_48%)]" />
-            <svg viewBox="0 0 210 112" className="w-full h-full" preserveAspectRatio="none" aria-hidden>
-              <circle cx="126" cy="34" r="9" fill="none" stroke="#F4EAD5" strokeWidth="1.2" opacity=".6"/>
-              <circle cx="150" cy="59" r="4" fill="none" stroke="#F4EAD5" strokeWidth="1" opacity=".45"/>
-              <path d="M35 90c46-27 99-31 175-15v37H8c5-8 14-15 27-22Z" fill="#16365A"/>
-            </svg>
-          </div>
-
-          <div className="relative flex items-center gap-3 min-w-0">
-            <img src="/doruk-alp-logo.jpeg" alt="Doruk Alp" className="h-[58px] w-[58px] object-contain shrink-0" />
-            <div className="min-w-0">
-              <div className="font-bold tracking-tight text-[18px] whitespace-nowrap">
-                DORUK <span className="text-[#D9AE62]">ALP</span>
-              </div>
-              <div className="mt-1.5 text-[10px] uppercase tracking-[0.22em] text-[#E6C67D] whitespace-nowrap">
-                Çamaşırhane
-              </div>
-              <div className="mt-2 flex items-center">
-                <span className="h-px w-20 bg-[#C9A45C]" />
-                <span className="mx-1.5 h-1.5 w-1.5 rounded-full bg-[#C9A45C]" />
-                <span className="h-px w-9 bg-[#C9A45C]" />
-              </div>
+      <header className="md:hidden sticky top-0 z-40 no-print overflow-hidden bg-[#061B35] text-white">
+        <svg viewBox="0 0 430 132" className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="header-navy" x2="1" y2="1">
+              <stop stopColor="#29435D" />
+              <stop offset=".38" stopColor="#0B2545" />
+              <stop offset="1" stopColor="#001329" />
+            </linearGradient>
+            <linearGradient id="header-gold">
+              <stop stopColor="#B78A3D" />
+              <stop offset=".35" stopColor="#FFE6A0" />
+              <stop offset=".7" stopColor="#BB8A3E" />
+              <stop offset="1" stopColor="#FFDEA0" />
+            </linearGradient>
+            <radialGradient id="header-bubble" cx=".28" cy=".2" r=".8">
+              <stop stopColor="#ECF5FF" stopOpacity=".85" />
+              <stop offset=".15" stopColor="#8BA6BC" stopOpacity=".3" />
+              <stop offset=".65" stopColor="#001329" stopOpacity=".05" />
+              <stop offset="1" stopColor="#BED4E6" stopOpacity=".55" />
+            </radialGradient>
+          </defs>
+          <path d="M0 0h430v132H0Z" fill="url(#header-navy)" />
+          <path d="M0 27c79 77 115 89 237 61S343 41 430 8v111H0Z" fill="#17324B" opacity=".35" />
+          <path d="M0 83c85 49 191 32 261 3s116-18 169-51v88H0Z" fill="#001226" opacity=".5" />
+          <path d="M0 26c30 36 70 67 113 78M331 87c30-39 63-65 99-78" fill="none" stroke="url(#header-gold)" strokeWidth=".8" />
+          <path d="M0 104c122 24 235 0 293-3s91 1 137 8" fill="none" stroke="#A3BED5" strokeOpacity=".17" strokeWidth=".7" />
+          {[ [12, 70, 4.5], [19, 86, 2], [87, 69, 2], [100, 81, 6], [116, 95, 1.8], [336, 80, 3.5], [370, 24, 5], [361, 40, 2] ].map(([cx, cy, r], i) => (
+            <circle key={i} cx={cx} cy={cy} r={r} fill="url(#header-bubble)" stroke="#DDEAF5" strokeOpacity=".2" strokeWidth=".35" />
+          ))}
+        </svg>
+        <div className="relative h-[116px] px-4 grid grid-cols-[76px_minmax(0,1fr)_76px] items-center gap-2">
+          <img src="/doruk-alp-logo.jpeg" alt="Doruk Alp" className="h-[64px] w-[64px] object-contain rounded-[15px] border border-[#DDB96F]/70 shadow-[0_0_16px_rgba(221,185,111,0.12)]" />
+          <div className="min-w-0 text-center">
+            <div className="font-serif font-bold text-[clamp(14px,4.2vw,22px)] whitespace-nowrap tracking-wide">
+              DORUK <span className="text-[#E6C67D]">ALP</span>
+            </div>
+            <div className="mt-1.5 text-[clamp(7px,2vw,10px)] uppercase tracking-[0.16em] text-[#F2EEE5] whitespace-nowrap">
+              Çamaşırhane
             </div>
           </div>
-
-          <div className="relative flex items-center gap-1">
-            <ThemeToggle />
-            <button onClick={() => setDrawerOpen(true)} className="p-2 rounded-xl hover:bg-white/5 transition-colors" aria-label="Menüyü aç">
-              <Menu size={25} className="text-[#E6C67D]" />
+          <div className="flex items-center justify-end gap-2">
+            <div className="[&>button]:rounded-xl [&>button]:border-[#DDB96F]/50 [&>button]:bg-[#061A30]/80 [&>button]:shadow-[inset_0_1px_4px_rgba(255,255,255,0.12)] [&>button]:p-2 [&_svg]:h-5 [&_svg]:w-5">
+              <ThemeToggle />
+            </div>
+            <button onClick={() => setDrawerOpen(true)} className="p-1 text-[#E6C67D] hover:text-[#FFE6A0] transition-colors" aria-label="Menüyü aç">
+              <Menu size={27} />
             </button>
           </div>
         </div>
-
-        <svg viewBox="0 0 430 20" className="block w-full h-[16px] -mt-[13px] pointer-events-none" preserveAspectRatio="none" aria-hidden>
-          <path d="M0 8C70 13 123 15 185 7c78-10 132 9 245-3v16H0Z" fill="#F7F5F0"/>
-          <path d="M0 6C70 11 123 13 185 5c78-10 132 9 245-3" fill="none" stroke="#C9A45C" strokeWidth="1.8"/>
+        <svg viewBox="0 0 430 24" className="relative block w-full h-[24px] -mt-2 pointer-events-none" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 5c101 16 181 10 265 0S373 0 430 9v15H0Z" fill="#F7F5F0" />
+          <path d="M0 5c101 16 181 10 265 0S373 0 430 9" fill="none" stroke="url(#header-gold)" strokeWidth="2.2" />
+          <path d="M0 9c101 16 181 10 265 0S373 4 430 13" fill="none" stroke="#FFFFFF" strokeOpacity=".7" strokeWidth="3" />
         </svg>
       </header>
 
