@@ -159,9 +159,14 @@ export function Sidebar() {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2.5">
             <LogoMark size={32} />
-            <span className="font-bold tracking-tight text-sm">
-              DORUK <span className="text-gold-500">ALP</span>
-            </span>
+            <div className="leading-none">
+              <div className="font-bold tracking-tight text-sm">
+                DORUK <span className="text-gold-500">ALP</span>
+              </div>
+              <div className="mt-1 text-[8px] uppercase tracking-[0.22em] text-gold-400/80">
+                Çamaşırhane
+              </div>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
