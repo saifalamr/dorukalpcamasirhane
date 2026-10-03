@@ -155,31 +155,49 @@ export function Sidebar() {
   return (
     <>
       {/* ===== Mobile top bar (hidden on md+) ===== */}
-      <div className="md:hidden sticky top-0 z-40 no-print bg-navy-950 text-white border-b border-navy-800">
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2.5">
-            <LogoMark size={32} />
-            <div className="leading-none">
-              <div className="font-bold tracking-tight text-sm">
+      <header className="md:hidden sticky top-0 z-40 no-print overflow-hidden bg-navy-950 text-white border-b border-gold-500/30">
+        <div className="absolute inset-0 pointer-events-none opacity-25">
+          <svg viewBox="0 0 430 96" className="w-full h-full" preserveAspectRatio="none" aria-hidden>
+            <circle cx="326" cy="24" r="9" fill="none" stroke="#F4EAD5" strokeWidth="1.5" />
+            <circle cx="352" cy="48" r="4" fill="none" stroke="#F4EAD5" strokeWidth="1.2" />
+            <path d="M255 77c45-20 92-26 175-16v35H238c4-7 9-13 17-19Z" fill="#16365A" />
+          </svg>
+        </div>
+        <div className="relative flex items-center justify-between px-4 h-[86px]">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="shrink-0">
+              <LogoMark size={48} />
+            </div>
+            <div className="leading-none min-w-0">
+              <div className="font-bold tracking-tight text-[17px] whitespace-nowrap">
                 DORUK <span className="text-gold-500">ALP</span>
               </div>
-              <div className="mt-1 text-[8px] uppercase tracking-[0.22em] text-gold-400/80">
+              <div className="mt-2 text-[9px] uppercase tracking-[0.24em] text-gold-400/90 whitespace-nowrap">
                 Çamaşırhane
+              </div>
+              <div className="mt-2 flex items-center gap-1">
+                <span className="h-px w-14 bg-gold-500/80" />
+                <span className="h-1 w-1 rounded-full bg-gold-500" />
+                <span className="h-px w-7 bg-gold-500/80" />
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <ThemeToggle />
             <button
               onClick={() => setDrawerOpen(true)}
-              className="p-2 -mr-2 rounded hover:bg-navy-800 transition-colors"
+              className="p-2 rounded-xl hover:bg-navy-800 transition-colors"
               aria-label="Menüyü aç"
             >
-              <Menu size={22} />
+              <Menu size={24} className="text-gold-400" />
             </button>
           </div>
         </div>
-      </div>
+        <svg viewBox="0 0 430 14" className="absolute bottom-[-1px] left-0 w-full h-3 pointer-events-none" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 9C92 16 147 2 225 8c79 7 127 7 205-4v10H0Z" fill="#F8F6F0" />
+          <path d="M0 7C92 14 147 0 225 6c79 7 127 7 205-4" fill="none" stroke="#C9A45C" strokeWidth="1.4" />
+        </svg>
+      </header>
 
       {/* ===== Mobile drawer ===== */}
       {drawerOpen && (
