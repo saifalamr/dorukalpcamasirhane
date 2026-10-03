@@ -156,7 +156,7 @@ export function Sidebar() {
     <>
       {/* ===== Mobile top bar (hidden on md+) ===== */}
       <header className="md:hidden sticky top-0 z-40 no-print overflow-hidden bg-[#061B35] text-white">
-        <svg viewBox="0 0 430 132" className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" aria-hidden="true">
+        <svg viewBox="0 22 430 110" className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="header-navy" x2="1" y2="1">
               <stop stopColor="#29435D" />
@@ -185,7 +185,7 @@ export function Sidebar() {
             <circle key={i} cx={cx} cy={cy} r={r} fill="url(#header-bubble)" stroke="#DDEAF5" strokeOpacity=".2" strokeWidth=".35" />
           ))}
         </svg>
-        <div className="relative h-[116px] px-4 grid grid-cols-[76px_minmax(0,1fr)_76px] items-center gap-2">
+        <div className="relative h-[94px] [&>*]:-translate-y-[11px] px-4 grid grid-cols-[76px_minmax(0,1fr)_76px] items-center gap-2">
           <img src="/doruk-alp-logo.jpeg" alt="Doruk Alp" className="h-[64px] w-[64px] object-contain rounded-[15px] border border-[#DDB96F]/70 shadow-[0_0_16px_rgba(221,185,111,0.12)]" />
           <div className="min-w-0 text-center">
             <div className="font-serif font-bold text-[clamp(14px,4.2vw,22px)] whitespace-nowrap tracking-wide">
