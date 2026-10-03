@@ -8,9 +8,17 @@ export const metadata: Metadata = {
   applicationName: "Doruk Alp Çamaşırhane",
   manifest: "/manifest.webmanifest",
   icons: {
-    icon: "/doruk-alp-icon.svg",
-    shortcut: "/doruk-alp-icon.svg",
-    apple: "/doruk-alp-icon.svg",
+    icon: [
+      { url: "/favicon.ico?v=doruk-alp", sizes: "16x16 32x32 48x48", type: "image/x-icon" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico?v=doruk-alp",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon-167.png", sizes: "167x167", type: "image/png" },
+      { url: "/apple-touch-icon-152.png", sizes: "152x152", type: "image/png" },
+    ],
   },
 };
 
