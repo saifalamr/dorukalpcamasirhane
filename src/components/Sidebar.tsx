@@ -242,8 +242,8 @@ export function Sidebar() {
       </aside>
 
       {/* ===== Mobile bottom quick-bar: daily pages in one tap ===== */}
-      <nav className="md:hidden no-print fixed bottom-0 inset-x-0 z-40 bg-navy-950 border-t border-navy-800 pb-[env(safe-area-inset-bottom)]">
-        <div className="grid grid-cols-5">
+      <nav aria-label="Hızlı gezinme" className="md:hidden no-print fixed bottom-0 inset-x-0 z-40 rounded-t-[20px] bg-[#061B35] border-t border-[#DDB96F]/45 shadow-[0_-5px_20px_rgba(6,27,53,0.12)] pb-[env(safe-area-inset-bottom)]">
+        <div className="grid grid-cols-5 px-2 pt-1.5 pb-1">
           {QUICK_NAV.map((item) => {
             const active =
               item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
@@ -252,12 +252,16 @@ export function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center gap-0.5 py-2 text-[10px] transition-colors ${
-                  active ? "text-gold-400" : "text-gold-100/60"
+                aria-current={active ? "page" : undefined}
+                className={`relative flex flex-col items-center gap-0.5 pt-1 pb-2 text-[9px] transition-colors ${
+                  active ? "text-[#E6C67D]" : "text-[#E9EEF4]/70 hover:text-[#E9EEF4]"
                 }`}
               >
-                <Icon size={18} />
-                {item.label}
+                <span className={`flex h-7 w-11 items-center justify-center rounded-xl transition-colors ${active ? "bg-[#E6C67D]/15" : ""}`}>
+                  <Icon size={19} strokeWidth={active ? 2 : 1.7} />
+                </span>
+                <span className={active ? "font-semibold" : ""}>{item.label}</span>
+                {active && <span aria-hidden="true" className="absolute bottom-0.5 h-0.5 w-5 rounded-full bg-[#E6C67D]" />}
               </Link>
             );
           })}
