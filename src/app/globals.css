@@ -170,3 +170,18 @@ table.matrix th,
 table.matrix td {
   border: 1px solid #DDD9CE;
 }
+
+/* Quiet laundry line art, visible only on the paper behind app content. */
+.laundry-background {
+  background-image: url('/laundry-pattern.svg');
+  background-repeat: repeat;
+  background-size: 480px 520px;
+}
+.dark .laundry-background {
+  background-image: none;
+}
+@media print {
+  .laundry-background {
+    background-image: none;
+  }
+}

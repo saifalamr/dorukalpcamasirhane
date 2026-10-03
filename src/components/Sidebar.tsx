@@ -189,7 +189,7 @@ export function Sidebar() {
           <img src="/doruk-alp-logo.jpeg" alt="Doruk Alp" className="h-[64px] w-[64px] object-contain rounded-[15px] border border-[#DDB96F]/70 shadow-[0_0_16px_rgba(221,185,111,0.12)]" />
           <div className="min-w-0 text-center">
             <div className="font-serif font-bold text-[clamp(14px,4.2vw,22px)] whitespace-nowrap tracking-wide">
-              DORUK <span className="text-[#E6C67D]">ALP</span>
+              Takip Sistemi
             </div>
             <div className="mt-1.5 text-[clamp(7px,2vw,10px)] uppercase tracking-[0.16em] text-[#F2EEE5] whitespace-nowrap">
               Çamaşırhane

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="520" viewBox="0 0 480 520" fill="none">
+  <g stroke="#29435D" stroke-opacity=".065" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Washing machine -->
+    <g transform="translate(345 24) rotate(8 40 45)">
+      <rect x="4" y="4" width="72" height="88" rx="8"/>
+      <path d="M4 25h72M53 14h13"/>
+      <circle cx="15" cy="14" r="2"/><circle cx="24" cy="14" r="2"/>
+      <circle cx="40" cy="57" r="23"/><circle cx="40" cy="57" r="17"/>
+      <path d="M25 60c9-10 20 10 30 0M14 92v4m52-4v4"/>
+    </g>
+    <!-- Shirt -->
+    <g transform="translate(38 148) rotate(-12 35 38)">
+      <path d="m20 5-20 16 13 19 10-7v44h40V33l10 7 13-19L66 5H54c-2 13-20 13-22 0H20Z"/>
+      <path d="M32 5c3 20 20 20 22 0M23 69h40"/>
+    </g>
+    <!-- Folded towels -->
+    <g transform="translate(288 299) rotate(-7 45 26)">
+      <rect x="3" y="3" width="85" height="17" rx="6"/>
+      <rect x="8" y="23" width="85" height="17" rx="6"/>
+      <rect x="0" y="43" width="85" height="17" rx="6"/>
+      <path d="M68 9h12M73 29h12M65 49h12"/>
+    </g>
+    <!-- Hanger -->
+    <g transform="translate(117 417) rotate(10 46 25)">
+      <path d="M40 13c0-12 17-12 17-2 0 6-10 8-10 14M47 25 4 49c-4 2-3 7 2 7h82c5 0 6-5 2-7L47 25Z"/>
+    </g>
+    <!-- Small soap bubbles -->
+    <circle cx="176" cy="63" r="12"/><circle cx="196" cy="44" r="5"/>
+    <circle cx="436" cy="221" r="9"/><circle cx="419" cy="204" r="4"/>
+    <circle cx="64" cy="357" r="8"/><circle cx="79" cy="340" r="3"/>
+  </g>
+</svg>
