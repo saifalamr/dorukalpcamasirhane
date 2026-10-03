@@ -167,7 +167,7 @@ export function Sidebar() {
           </div>
 
           <div className="relative flex items-center gap-3 min-w-0">
-            <img src="/doruk-alp-icon.svg" alt="Doruk Alp" className="h-[58px] w-[58px] object-contain shrink-0" />
+            <img src="/doruk-alp-logo.jpeg" alt="Doruk Alp" className="h-[58px] w-[58px] object-contain shrink-0" />
             <div className="min-w-0">
               <div className="font-bold tracking-tight text-[18px] whitespace-nowrap">
                 DORUK <span className="text-[#D9AE62]">ALP</span>
