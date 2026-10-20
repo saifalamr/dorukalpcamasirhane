@@ -1,7 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import { formatDateTR, MONTHS_TR } from "@/lib/format";
 import { getSettings } from "@/lib/settings";
-import { PrintButton } from "@/components/PrintButton";
+import { DispatchActions } from "@/components/DispatchActions";
+import { DispatchPreview } from "@/components/DispatchPreview";
+import "@/components/dispatch.css";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +56,7 @@ export default async function BatchIrsaliyePage({ searchParams }: { searchParams
   const brandWords = settings.store_name.trim().split(/\s+/);
 
   return (
-    <div>
+    <div className="dispatch-page min-w-0">
       <Breadcrumbs
         items={[
           { label: "Aylık Faturalama", href: "/faturalama" },
@@ -72,7 +74,7 @@ export default async function BatchIrsaliyePage({ searchParams }: { searchParams
           </h1>
           <p className="text-sm text-ink/55">Yazdırın — her irsaliye ayrı sayfaya basılır.</p>
         </div>
-        <PrintButton customerName={customer?.name ?? ""} period={periodLabel} />
+        <DispatchActions fileName={`Toplu Irsaliye - ${customer?.name ?? ""} - ${monthKey}`} customerName={customer?.name ?? ""} periodLabel={periodLabel} />
       </div>
 
       <div>
@@ -80,66 +82,65 @@ export default async function BatchIrsaliyePage({ searchParams }: { searchParams
           const items = rec.daily_record_items ?? [];
           const totalQty = items.reduce((s: number, i: any) => s + Number(i.quantity), 0);
           return (
-            <div
-              key={rec.id}
-              className="print-area bg-white rounded-md border border-line max-w-2xl p-6 shadow-sm mx-auto mb-8"
-              style={{ breakAfter: "page" }}
-            >
-              {/* Letterhead */}
-              <div className="flex items-start justify-between gap-4 rounded-md px-4 py-3 mb-4" style={{ background: "#0E1A2B" }}>
-                <div>
-                  <p className="text-base font-bold" style={{ color: "#FFFFFF" }}>
-                    {brandWords[0]} <span style={{ color: "#C9A45C" }}>{brandWords.slice(1).join(" ")}</span>
-                  </p>
-                  <p className="text-[10px]" style={{ color: "#D8B878" }}>
-                    {settings.phone}
-                  </p>
+            <DispatchPreview key={rec.id}>
+              <div className="print-area dispatch-document bg-white rounded-md border border-line shadow-sm">
+                {/* Letterhead */}
+                <div className="dispatch-letterhead flex items-start justify-between gap-4 rounded-md px-4 py-3 mb-4" data-pdf-keep style={{ background: "#0E1A2B" }}>
+                  <div>
+                    <p className="text-base font-bold" style={{ color: "#FFFFFF" }}>
+                      {brandWords[0]} <span style={{ color: "#C9A45C" }}>{brandWords.slice(1).join(" ")}</span>
+                    </p>
+                    <p className="text-[10px]" style={{ color: "#D8B878" }}>
+                      {settings.phone}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-semibold" style={{ color: "#C9A45C" }}>
+                      İRSALİYE / SEVKİYAT FİŞİ
+                    </p>
+                    <p className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
+                      {customer?.name}
+                    </p>
+                    <p className="text-xs font-medium" style={{ color: "#D8B878" }}>
+                      {formatDateTR(rec.record_date)}
+                    </p>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-[10px] font-semibold" style={{ color: "#C9A45C" }}>
-                    İRSALİYE / SEVKİYAT FİŞİ
-                  </p>
-                  <p className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
-                    {customer?.name}
-                  </p>
-                  <p className="text-xs font-medium" style={{ color: "#D8B878" }}>
-                    {formatDateTR(rec.record_date)}
-                  </p>
-                </div>
-              </div>
-
-              <table className="w-full text-sm mb-4">
-                <thead>
-                  <tr className="text-left text-ink/60 border-b border-line">
-                    <th className="py-1.5 font-medium">#</th>
-                    <th className="py-1.5 font-medium">Malzeme</th>
-                    <th className="py-1.5 font-medium text-right">Adet</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((i: any, k: number) => (
-                    <tr key={k} className="border-b border-line/60">
-                      <td className="py-1.5 text-ink/40">{k + 1}</td>
-                      <td className="py-1.5">{i.products?.name}</td>
-                      <td className="py-1.5 text-right">
-                        {Number(i.quantity).toLocaleString("tr-TR")} {i.products?.unit === "m2" ? "m²" : ""}
-                      </td>
+  
+                <table className="dispatch-table w-full text-sm mb-4">
+                  <colgroup><col style={{ width: "8%" }} /><col style={{ width: "67%" }} /><col style={{ width: "25%" }} /></colgroup>
+                  <thead>
+                    <tr className="text-left text-ink/60 border-b border-line">
+                      <th className="py-1.5 font-medium">#</th>
+                      <th className="py-1.5 font-medium">Malzeme</th>
+                      <th className="py-1.5 font-medium text-right">Adet</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <div className="flex justify-between items-end">
-                <p className="text-sm font-medium">Toplam: {totalQty.toLocaleString("tr-TR")} adet</p>
-                <p className="text-[10px] text-ink/40">
-                  {idx + 1} / {records.length}
-                </p>
+                  </thead>
+                  <tbody>
+                    {items.map((i: any, k: number) => (
+                      <tr key={k} className="border-b border-line/60">
+                        <td className="py-1.5 text-ink/40">{k + 1}</td>
+                        <td className="py-1.5">{i.products?.name}</td>
+                        <td className="py-1.5 text-right">
+                          {Number(i.quantity).toLocaleString("tr-TR")} {i.products?.unit === "m2" ? "m²" : ""}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+  
+                <div className="flex justify-between items-end" data-pdf-keep>
+                  <p className="text-sm font-medium">Toplam: {totalQty.toLocaleString("tr-TR")} adet</p>
+                  <p className="text-[10px] text-ink/40">
+                    {idx + 1} / {records.length}
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-6 mt-6 pt-2 border-t border-line" data-pdf-keep>
+                  <p className="text-[10px] text-ink/50">Teslim Eden: ______________</p>
+                  <p className="text-[10px] text-ink/50">Teslim Alan: ______________</p>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-6 mt-6 pt-2 border-t border-line">
-                <p className="text-[10px] text-ink/50">Teslim Eden: ______________</p>
-                <p className="text-[10px] text-ink/50">Teslim Alan: ______________</p>
-              </div>
-            </div>
+            </DispatchPreview>
           );
         })}
         {records.length === 0 && (

@@ -1,0 +1,69 @@
+/* Scoped to dispatch notes; invoice styles and shared PDF helpers are untouched. */
+main:has(.dispatch-page) { min-width: 0; }
+.dispatch-preview {
+  width: 100%;
+  max-width: 186mm;
+  margin: 0 auto 24px;
+  overflow: hidden;
+}
+.dispatch-stage { width: 186mm; transform-origin: top left; }
+.dispatch-document {
+  box-sizing: border-box;
+  width: 186mm;
+  max-width: none;
+  padding: 24px;
+  color: #1C2321;
+  background: white;
+}
+.dispatch-document * { box-sizing: border-box; }
+.dispatch-letterhead > div { min-width: 0; flex: 1 1 0; }
+.dispatch-letterhead > div > div { min-width: 0; }
+.dispatch-letterhead { overflow-wrap: anywhere; }
+.dispatch-table { table-layout: fixed; border-collapse: collapse; min-width: 0; }
+.dispatch-table th, .dispatch-table td {
+  overflow-wrap: anywhere;
+  vertical-align: top;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.dispatch-document [data-pdf-keep], .dispatch-table tr { break-inside: avoid; }
+.dispatch-table thead { display: table-header-group; }
+
+/* Named page avoids changing the format of invoices after client navigation. */
+@page dispatch { size: A4 portrait; margin: 12mm; }
+@media print {
+  body:has(.dispatch-page) { margin: 0; }
+  main:has(.dispatch-page) {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    overflow: visible !important;
+  }
+  .dispatch-page { page: dispatch; }
+  .dispatch-preview {
+    height: auto !important;
+    width: 100%;
+    max-width: none;
+    overflow: visible;
+    margin: 0;
+    break-after: page;
+  }
+  .dispatch-preview:last-child { break-after: auto; }
+  .dispatch-stage { width: 100%; transform: none !important; }
+  .dispatch-document {
+    width: 100%;
+    padding: 24px;
+    border-radius: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  /* Override the shared print rule that turns navy letterhead text dark. */
+  .dispatch-document .dispatch-letterhead,
+  .dispatch-document .dispatch-letterhead * { color: #F4EAD5 !important; }
+  .dispatch-document .dispatch-letterhead .font-bold,
+  .dispatch-document .dispatch-letterhead .text-xl { color: #FFFFFF !important; }
+  .dispatch-document .dispatch-letterhead span,
+  .dispatch-document .dispatch-letterhead .font-medium,
+  .dispatch-document .dispatch-letterhead .text-\[10px\] { color: #D8B878 !important; }
+}
