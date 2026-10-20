@@ -58,13 +58,12 @@ export function DispatchActions({ fileName, customerName, periodLabel, customerP
     if (!file) return;
     setBusy(true);
     try {
-      if (navigator.canShare?.({ files: [file] }) && navigator.share) {
-        // Called before any await, directly from the user's tap.
-        await navigator.share({
-          files: [file],
-          title: file.name,
-          text: `${customerName} — ${periodLabel}`,
-        });
+      // Send the exact prepared PDF, with no text/title companion item.
+      // WhatsApp must receive a document attachment, never a preview or URL.
+      const payload = { files: [file] };
+      if (navigator.canShare?.(payload) && navigator.share) {
+        // No generation, conversion or await before this fresh-tap call.
+        await navigator.share(payload);
         return;
       }
       download(file);
@@ -104,7 +103,9 @@ export function DispatchActions({ fileName, customerName, periodLabel, customerP
         PDF hazır. Göndermek için “WhatsApp ile paylaş” düğmesine dokunun.
       </p>}
       {fallback && <div role="status" className="w-full text-right text-sm">
-        PDF indirildi. WhatsApp sohbetini açıp dosyayı ekleyin.{" "}
+        Bu tarayıcı dosya paylaşımını desteklemiyor veya paylaşım tamamlanamadı.
+        PDF indirildi. WhatsApp’ta sohbeti açın; + / ataç → Belge → Dosyalardan seç
+        yoluyla İndirilenler klasöründeki PDF’yi ekleyin.{" "}
         <a href={waUrl} target="_blank" rel="noopener noreferrer" className="underline">WhatsApp’ı Aç</a>
       </div>}
     </div>
