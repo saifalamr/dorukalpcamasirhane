@@ -104,7 +104,6 @@ export async function GET(request: Request) {
   const wb = new ExcelJS.Workbook();
   wb.creator = settings.store_name;
   // Recalculate formula-based totals whenever the workbook is opened/edited in Excel.
-  wb.calcProperties = { fullCalcOnLoad: true, forceFullCalc: true };
   const ws = wb.addWorksheet("Aylık Rapor");
 
   // Columns: A = malzeme, B.. = days 1..n, then totals.
