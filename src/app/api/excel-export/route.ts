@@ -280,7 +280,11 @@ export async function GET(request: Request) {
     const gQty = ws.getCell(r, qtyCol);
     const firstDataRow = headerRow + 1;
     const lastDataRow = r - 1;
-    gQty.value = { formula: `SUM(${qtyCol}${firstDataRow}:${qtyCol}${lastDataRow})`, result: grandQty };
+    const firstQtyAddress = ws.getCell(firstDataRow, qtyCol).address;
+    const lastQtyAddress = ws.getCell(lastDataRow, qtyCol).address;
+    const firstAmountAddress = ws.getCell(firstDataRow, amountCol).address;
+    const lastAmountAddress = ws.getCell(lastDataRow, amountCol).address;
+    gQty.value = { formula: `SUM(${firstQtyAddress}:${lastQtyAddress})`, result: grandQty };
     gQty.font = { bold: true, size: 11, color: { argb: NAVY } };
     gQty.alignment = { horizontal: "center" };
 
@@ -289,7 +293,7 @@ export async function GET(request: Request) {
     gPrice.fill = { type: "pattern", pattern: "solid", fgColor: { argb: GOLD_SOFT } };
 
     const gAmt = ws.getCell(r, amountCol);
-    gAmt.value = { formula: `SUM(${amountCol}${firstDataRow}:${amountCol}${lastDataRow})`, result: grandTotal };
+    gAmt.value = { formula: `SUM(${firstAmountAddress}:${lastAmountAddress})`, result: grandTotal };
     gAmt.font = { bold: true, size: 11, color: { argb: NAVY } };
     gAmt.alignment = { horizontal: "right", indent: 1 };
     gAmt.numFmt = "#,##0.00\\ \"₺\"";
