@@ -103,6 +103,8 @@ export async function GET(request: Request) {
   // ===== Workbook =====
   const wb = new ExcelJS.Workbook();
   wb.creator = settings.store_name;
+  // Recalculate formula-based totals whenever the workbook is opened/edited in Excel.
+  wb.calcProperties = { calcMode: "auto", fullCalcOnLoad: true, forceFullCalc: true };
   const ws = wb.addWorksheet("Aylık Rapor");
 
   // Columns: A = malzeme, B.. = days 1..n, then totals.
@@ -238,7 +240,9 @@ export async function GET(request: Request) {
     }
 
     const qtyCell = ws.getCell(r, qtyCol);
-    qtyCell.value = row.totalQty;
+    const firstDayAddress = ws.getCell(r, firstDayCol).address;
+    const lastDayAddress = ws.getCell(r, firstDayCol + nDays - 1).address;
+    qtyCell.value = { formula: `SUM(${firstDayAddress}:${lastDayAddress})`, result: row.totalQty };
     qtyCell.font = { size: 10, bold: true, color: { argb: INK } };
     qtyCell.alignment = { horizontal: "center" };
     qtyCell.numFmt = "#,##0.#";
@@ -250,7 +254,7 @@ export async function GET(request: Request) {
     priceCell.numFmt = "#,##0.00\\ \"₺\"";
 
     const amtCell = ws.getCell(r, amountCol);
-    amtCell.value = row.totalAmount;
+    amtCell.value = { formula: `=${qtyCell.address}*${priceCell.address}`, result: row.totalAmount };
     amtCell.font = { size: 10, bold: true, color: { argb: INK } };
     amtCell.alignment = { horizontal: "right", indent: 1 };
     amtCell.numFmt = "#,##0.00\\ \"₺\"";
@@ -274,7 +278,9 @@ export async function GET(request: Request) {
     labelCell.alignment = { horizontal: "right", vertical: "middle", indent: 1 };
 
     const gQty = ws.getCell(r, qtyCol);
-    gQty.value = grandQty;
+    const firstDataRow = headerRow + 1;
+    const lastDataRow = r - 1;
+    gQty.value = { formula: `SUM(${qtyCol}${firstDataRow}:${qtyCol}${lastDataRow})`, result: grandQty };
     gQty.font = { bold: true, size: 11, color: { argb: NAVY } };
     gQty.alignment = { horizontal: "center" };
 
@@ -283,7 +289,7 @@ export async function GET(request: Request) {
     gPrice.fill = { type: "pattern", pattern: "solid", fgColor: { argb: GOLD_SOFT } };
 
     const gAmt = ws.getCell(r, amountCol);
-    gAmt.value = grandTotal;
+    gAmt.value = { formula: `SUM(${amountCol}${firstDataRow}:${amountCol}${lastDataRow})`, result: grandTotal };
     gAmt.font = { bold: true, size: 11, color: { argb: NAVY } };
     gAmt.alignment = { horizontal: "right", indent: 1 };
     gAmt.numFmt = "#,##0.00\\ \"₺\"";
